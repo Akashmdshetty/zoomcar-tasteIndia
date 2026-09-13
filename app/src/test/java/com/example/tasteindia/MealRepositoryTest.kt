@@ -2,6 +2,7 @@ package com.example.tasteindia
 
 import com.example.tasteindia.data.remote.MealApi
 import com.example.tasteindia.data.remote.RetrofitClient
+import com.example.tasteindia.data.remote.dto.MealDetailsResponseDto
 import com.example.tasteindia.data.remote.dto.MealFilterResponseDto
 import com.example.tasteindia.data.remote.dto.MealSummaryDto
 import com.example.tasteindia.data.repository.DefaultMealRepository
@@ -55,8 +56,8 @@ class MealRepositoryTest {
                 return Response.success(MealFilterResponseDto(meals = dtoList))
             }
 
-            override suspend fun getMealDetails(mealId: String): Response<Unit> {
-                return Response.success(Unit)
+            override suspend fun getMealDetails(mealId: String): Response<MealDetailsResponseDto> {
+                return Response.success(MealDetailsResponseDto(meals = emptyList()))
             }
         }
 
@@ -77,8 +78,8 @@ class MealRepositoryTest {
                 return Response.success(MealFilterResponseDto(meals = null))
             }
 
-            override suspend fun getMealDetails(mealId: String): Response<Unit> {
-                return Response.success(Unit)
+            override suspend fun getMealDetails(mealId: String): Response<MealDetailsResponseDto> {
+                return Response.success(MealDetailsResponseDto(meals = null))
             }
         }
 
