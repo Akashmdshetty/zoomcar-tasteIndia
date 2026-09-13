@@ -1,5 +1,6 @@
 package com.example.tasteindia.data.remote
 
+import com.example.tasteindia.data.remote.dto.MealDetailsResponseDto
 import com.example.tasteindia.data.remote.dto.MealFilterResponseDto
 import retrofit2.Response
 import retrofit2.http.GET
@@ -18,11 +19,11 @@ interface MealApi {
     suspend fun getIndianMeals(): Response<MealFilterResponseDto>
 
     /**
-     * Signature prepared for future lookup endpoint (Milestone for details).
+     * Obtains complete details for a specific meal.
      * Endpoint: lookup.php?i={mealId}
      */
     @GET("lookup.php")
     suspend fun getMealDetails(
         @Query("i") mealId: String
-    ): Response<Unit> // Signature prepared for later lookup implementation
+    ): Response<MealDetailsResponseDto>
 }
