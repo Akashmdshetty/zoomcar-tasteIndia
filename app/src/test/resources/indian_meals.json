@@ -1,0 +1,19 @@
+{
+  "meals": [
+    {
+      "strMeal": "Butter Chicken",
+      "strMealThumb": "https://www.themealdb.com/images/media/meals/58oia91598734299.jpg",
+      "idMeal": "52850"
+    },
+    {
+      "strMeal": "Dal Makhani",
+      "strMealThumb": "https://www.themealdb.com/images/media/meals/v28wo51619787382.jpg",
+      "idMeal": "52785"
+    },
+    {
+      "strMeal": "Aloo Gobi",
+      "strMealThumb": "https://www.themealdb.com/images/media/meals/vvqqw11487347355.jpg",
+      "idMeal": "52786"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "meals": [
+    {
+      "idMeal": "52850",
+      "strMeal": "Butter Chicken",
+      "strCategory": "Chicken",
+      "strArea": "Indian",
+      "strInstructions": "1. Marinate chicken with yoghurt and spices.\n2. Cook in oven or pan.\n3. Prepare butter tomato gravy and simmer.",
+      "strMealThumb": "https://www.themealdb.com/images/media/meals/58oia91598734299.jpg",
+      "strTags": "Curry,Spicy",
+      "strYoutube": "https://www.youtube.com/watch?v=a03U45jFxOI",
+      "strSource": "https://www.bbcgoodfood.com/recipes/butter-chicken",
+      "strIngredient1": "Chicken",
+      "strIngredient2": "Butter",
+      "strIngredient3": "Tomato Puree",
+      "strIngredient4": "   ",
+      "strIngredient5": null,
+      "strMeasure1": "500g",
+      "strMeasure2": "2 tbsp",
+      "strMeasure3": "1 cup",
+      "strMeasure4": "",
+      "strMeasure5": null
+    }
+  ]
+}

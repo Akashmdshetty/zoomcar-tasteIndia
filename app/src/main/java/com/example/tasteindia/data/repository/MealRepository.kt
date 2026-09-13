@@ -7,8 +7,14 @@ import com.example.tasteindia.data.remote.safeApiCall
 import com.example.tasteindia.domain.model.Meal
 import com.example.tasteindia.domain.model.MealDetails
 import com.example.tasteindia.domain.model.Result
+import java.util.concurrent.ConcurrentHashMap
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 /**
  * Repository interface defining the recipe data contract.
@@ -31,6 +37,10 @@ class DefaultMealRepository(
     private val api: MealApi,
     private val preferencesManager: PreferencesManager? = null
 ) : MealRepository {
+
+    private val detailCache = ConcurrentHashMap<String, MealDetails>()
+    private val inFlightDetailRequests = ConcurrentHashMap<String, Deferred<Result<MealDetails>>>()
+    private val mutex = Mutex()
 
     override suspend fun getIndianMeals(): Result<List<Meal>> {
         return when (val networkResult = safeApiCall { api.getIndianMeals() }) {
@@ -58,11 +68,40 @@ class DefaultMealRepository(
         if (mealId.isBlank()) {
             return Result.Error("Invalid recipe ID")
         }
+
+        // 1. Check in-memory cache
+        detailCache[mealId]?.let { cachedDetails ->
+            return Result.Success(cachedDetails)
+        }
+
+        // 2. In-flight request deduplication
+        val deferredRequest = mutex.withLock {
+            detailCache[mealId]?.let { cachedDetails ->
+                return Result.Success(cachedDetails)
+            }
+            inFlightDetailRequests[mealId] ?: coroutineScope {
+                async {
+                    fetchAndCacheMealDetails(mealId)
+                }.also { newDeferred ->
+                    inFlightDetailRequests[mealId] = newDeferred
+                }
+            }
+        }
+
+        return try {
+            deferredRequest.await()
+        } finally {
+            inFlightDetailRequests.remove(mealId)
+        }
+    }
+
+    private suspend fun fetchAndCacheMealDetails(mealId: String): Result<MealDetails> {
         return when (val networkResult = safeApiCall { api.getMealDetails(mealId) }) {
             is NetworkResult.Success -> {
                 val dto = networkResult.data.meals?.firstOrNull()
                 val details = dto?.toDomainModel()
                 if (details != null) {
+                    detailCache[mealId] = details
                     Result.Success(details)
                 } else {
                     Result.Error("Recipe details not found")

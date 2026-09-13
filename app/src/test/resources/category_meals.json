@@ -1,0 +1,14 @@
+{
+  "meals": [
+    {
+      "strMeal": "Butter Chicken",
+      "strMealThumb": "https://www.themealdb.com/images/media/meals/58oia91598734299.jpg",
+      "idMeal": "52850"
+    },
+    {
+      "strMeal": "Italian Chicken Pasta",
+      "strMealThumb": "https://www.themealdb.com/images/media/meals/pasta.jpg",
+      "idMeal": "99999"
+    }
+  ]
+}

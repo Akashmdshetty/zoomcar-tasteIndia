@@ -154,7 +154,9 @@ private fun RecipeListContent(
     onFavouriteToggle: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val listState = androidx.compose.foundation.lazy.rememberLazyListState()
     LazyColumn(
+        state = listState,
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
