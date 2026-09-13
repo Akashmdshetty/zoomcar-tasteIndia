@@ -59,6 +59,22 @@ class MealRepositoryTest {
             override suspend fun getMealDetails(mealId: String): Response<MealDetailsResponseDto> {
                 return Response.success(MealDetailsResponseDto(meals = emptyList()))
             }
+
+            override suspend fun getMealsByCategory(category: String): Response<MealFilterResponseDto> {
+                return Response.success(MealFilterResponseDto(meals = emptyList()))
+            }
+
+            override suspend fun getMealsByIngredient(ingredient: String): Response<MealFilterResponseDto> {
+                return Response.success(MealFilterResponseDto(meals = emptyList()))
+            }
+
+            override suspend fun getCategories(): Response<com.example.tasteindia.data.remote.dto.CategoryListResponseDto> {
+                return Response.success(com.example.tasteindia.data.remote.dto.CategoryListResponseDto(meals = emptyList()))
+            }
+
+            override suspend fun getIngredients(): Response<com.example.tasteindia.data.remote.dto.IngredientListResponseDto> {
+                return Response.success(com.example.tasteindia.data.remote.dto.IngredientListResponseDto(meals = emptyList()))
+            }
         }
 
         val repository = DefaultMealRepository(fakeApi)
@@ -80,6 +96,22 @@ class MealRepositoryTest {
 
             override suspend fun getMealDetails(mealId: String): Response<MealDetailsResponseDto> {
                 return Response.success(MealDetailsResponseDto(meals = null))
+            }
+
+            override suspend fun getMealsByCategory(category: String): Response<MealFilterResponseDto> {
+                return Response.success(MealFilterResponseDto(meals = null))
+            }
+
+            override suspend fun getMealsByIngredient(ingredient: String): Response<MealFilterResponseDto> {
+                return Response.success(MealFilterResponseDto(meals = null))
+            }
+
+            override suspend fun getCategories(): Response<com.example.tasteindia.data.remote.dto.CategoryListResponseDto> {
+                return Response.success(com.example.tasteindia.data.remote.dto.CategoryListResponseDto(meals = null))
+            }
+
+            override suspend fun getIngredients(): Response<com.example.tasteindia.data.remote.dto.IngredientListResponseDto> {
+                return Response.success(com.example.tasteindia.data.remote.dto.IngredientListResponseDto(meals = null))
             }
         }
 

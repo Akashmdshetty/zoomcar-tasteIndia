@@ -12,11 +12,14 @@ import kotlinx.coroutines.flow.flowOf
 
 /**
  * Repository interface defining the recipe data contract.
- * Enables deterministic test doubles for unit testing.
  */
 interface MealRepository {
     suspend fun getIndianMeals(): Result<List<Meal>>
     suspend fun getMealDetails(mealId: String): Result<MealDetails>
+    suspend fun getMealIdsByCategory(category: String): Result<Set<String>>
+    suspend fun getMealIdsByIngredient(ingredient: String): Result<Set<String>>
+    suspend fun getAvailableCategories(): Result<List<String>>
+    suspend fun getAvailableIngredients(): Result<List<String>>
     fun getFavouriteIds(): Flow<Set<String>>
     suspend fun toggleFavourite(mealId: String)
 }
@@ -77,6 +80,76 @@ class DefaultMealRepository(
             is NetworkResult.UnexpectedError -> {
                 Result.Error("An unexpected error occurred.", networkResult.throwable)
             }
+        }
+    }
+
+    override suspend fun getMealIdsByCategory(category: String): Result<Set<String>> {
+        if (category.isBlank()) {
+            return Result.Success(emptySet())
+        }
+        return when (val networkResult = safeApiCall { api.getMealsByCategory(category) }) {
+            is NetworkResult.Success -> {
+                val ids = networkResult.data.meals.orEmpty()
+                    .mapNotNull { it.idMeal?.trim() }
+                    .filter { it.isNotBlank() }
+                    .toSet()
+                Result.Success(ids)
+            }
+            is NetworkResult.HttpError -> Result.Error("HTTP Error ${networkResult.code}")
+            is NetworkResult.NetworkError -> Result.Error("Network failure", networkResult.throwable)
+            is NetworkResult.SerializationError -> Result.Error("Serialization failure", networkResult.throwable)
+            is NetworkResult.UnexpectedError -> Result.Error("Unexpected error", networkResult.throwable)
+        }
+    }
+
+    override suspend fun getMealIdsByIngredient(ingredient: String): Result<Set<String>> {
+        if (ingredient.isBlank()) {
+            return Result.Success(emptySet())
+        }
+        return when (val networkResult = safeApiCall { api.getMealsByIngredient(ingredient) }) {
+            is NetworkResult.Success -> {
+                val ids = networkResult.data.meals.orEmpty()
+                    .mapNotNull { it.idMeal?.trim() }
+                    .filter { it.isNotBlank() }
+                    .toSet()
+                Result.Success(ids)
+            }
+            is NetworkResult.HttpError -> Result.Error("HTTP Error ${networkResult.code}")
+            is NetworkResult.NetworkError -> Result.Error("Network failure", networkResult.throwable)
+            is NetworkResult.SerializationError -> Result.Error("Serialization failure", networkResult.throwable)
+            is NetworkResult.UnexpectedError -> Result.Error("Unexpected error", networkResult.throwable)
+        }
+    }
+
+    override suspend fun getAvailableCategories(): Result<List<String>> {
+        return when (val networkResult = safeApiCall { api.getCategories() }) {
+            is NetworkResult.Success -> {
+                val list = networkResult.data.meals.orEmpty()
+                    .mapNotNull { it.strCategory?.trim() }
+                    .filter { it.isNotBlank() }
+                    .sorted()
+                Result.Success(list)
+            }
+            is NetworkResult.HttpError -> Result.Error("HTTP Error ${networkResult.code}")
+            is NetworkResult.NetworkError -> Result.Error("Network failure", networkResult.throwable)
+            is NetworkResult.SerializationError -> Result.Error("Serialization failure", networkResult.throwable)
+            is NetworkResult.UnexpectedError -> Result.Error("Unexpected error", networkResult.throwable)
+        }
+    }
+
+    override suspend fun getAvailableIngredients(): Result<List<String>> {
+        return when (val networkResult = safeApiCall { api.getIngredients() }) {
+            is NetworkResult.Success -> {
+                val list = networkResult.data.meals.orEmpty()
+                    .mapNotNull { it.strIngredient?.trim() }
+                    .filter { it.isNotBlank() }
+                    .sorted()
+                Result.Success(list)
+            }
+            is NetworkResult.HttpError -> Result.Error("HTTP Error ${networkResult.code}")
+            is NetworkResult.NetworkError -> Result.Error("Network failure", networkResult.throwable)
+            is NetworkResult.SerializationError -> Result.Error("Serialization failure", networkResult.throwable)
+            is NetworkResult.UnexpectedError -> Result.Error("Unexpected error", networkResult.throwable)
         }
     }
 
