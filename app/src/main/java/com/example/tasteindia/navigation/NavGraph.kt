@@ -45,8 +45,26 @@ fun TasteIndiaNavGraph(
                 onFavouriteToggle = { recipeId ->
                     recipesViewModel.toggleFavourite(recipeId)
                 },
+                onSearchQueryChange = { query ->
+                    recipesViewModel.onSearchQueryChange(query)
+                },
+                onCategorySelect = { category ->
+                    recipesViewModel.onCategorySelect(category)
+                },
+                onIngredientSelect = { ingredient ->
+                    recipesViewModel.onIngredientSelect(ingredient)
+                },
+                onFavouritesOnlyToggle = { enabled ->
+                    recipesViewModel.onFavouritesOnlyToggle(enabled)
+                },
+                onSortOrderSelect = { sortOrder ->
+                    recipesViewModel.onSortOrderSelect(sortOrder)
+                },
+                onClearAll = {
+                    recipesViewModel.onClearAll()
+                },
                 onRetry = {
-                    recipesViewModel.loadRecipes()
+                    recipesViewModel.loadData()
                 }
             )
         }
