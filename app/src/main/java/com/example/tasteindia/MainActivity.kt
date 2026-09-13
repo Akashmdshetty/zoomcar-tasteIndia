@@ -10,8 +10,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +31,9 @@ import com.example.tasteindia.navigation.TasteIndiaNavGraph
 import com.example.tasteindia.ui.details.RecipeDetailsViewModel
 import com.example.tasteindia.ui.favourites.FavouritesViewModel
 import com.example.tasteindia.ui.recipes.RecipesViewModel
+import com.example.tasteindia.ui.theme.SpicePrimary
+import com.example.tasteindia.ui.theme.SpicePrimaryFixed
+import com.example.tasteindia.ui.theme.SpiceSurfaceContainerLowest
 import com.example.tasteindia.ui.theme.TasteIndiaTheme
 
 class MainActivity : ComponentActivity() {
@@ -76,7 +81,9 @@ fun TasteIndiaMainContainer(
         modifier = modifier.fillMaxSize(),
         bottomBar = {
             if (showBottomBar) {
-                NavigationBar {
+                NavigationBar(
+                    containerColor = SpiceSurfaceContainerLowest
+                ) {
                     NavigationBarItem(
                         selected = currentRoute == Destinations.RECIPES,
                         onClick = {
@@ -89,7 +96,12 @@ fun TasteIndiaMainContainer(
                             }
                         },
                         icon = { Icon(Icons.Filled.Menu, contentDescription = "Recipes") },
-                        label = { Text("Recipes") }
+                        label = { Text("Recipes") },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = SpicePrimary,
+                            selectedTextColor = SpicePrimary,
+                            indicatorColor = SpicePrimaryFixed
+                        )
                     )
                     NavigationBarItem(
                         selected = currentRoute == Destinations.FAVOURITES,
@@ -103,7 +115,12 @@ fun TasteIndiaMainContainer(
                             }
                         },
                         icon = { Icon(Icons.Filled.Favorite, contentDescription = "Favourites") },
-                        label = { Text("Favourites") }
+                        label = { Text("Favourites") },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = SpicePrimary,
+                            selectedTextColor = SpicePrimary,
+                            indicatorColor = SpicePrimaryFixed
+                        )
                     )
                 }
             }

@@ -78,6 +78,11 @@ fun TasteIndiaNavGraph(
                 },
                 onFavouriteToggle = { recipeId ->
                     favouritesViewModel.toggleFavourite(recipeId)
+                },
+                onNavigateToRecipes = {
+                    navController.navigate(Destinations.RECIPES) {
+                        popUpTo(Destinations.RECIPES) { inclusive = true }
+                    }
                 }
             )
         }
